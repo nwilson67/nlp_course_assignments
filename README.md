@@ -15,7 +15,7 @@ and NOT the original main repo I have created (or else you'll be pushing your as
 
 I believe this is the default.
 
-3. Add me (Matt) as a contributor. Username is `goodwin-matt`. 
+3. Add me (Matt) as a contributor. Username is `goodwin-matt`. Send me the repo link as well to make sure I can view it.
 
 That way I can view your assignments and comment as needed.
 
