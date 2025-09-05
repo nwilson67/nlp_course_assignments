@@ -1,9 +1,9 @@
-# Course Assignments for Intro to NLP
+#Course Assignments for Intro to NLP
 Assignments associated with DSAI 5810/6810 Fall 2025 Intro to NLP.
 
 ## Setup Instructions
 
-
+Just testing
 1. First fork this repo ("Create New Fork"). 
 
 <img src="images/Screenshot%202025-08-22%20at%208.40.27%E2%80%AFPM.png" alt="drawing" width="200"/>
