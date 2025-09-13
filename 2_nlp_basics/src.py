@@ -18,20 +18,33 @@ def pdf_entity_extractor(pdf_file_location, display_file_location: str = None) -
     Return a dictionary of entities from a pdf. Optionally display entities via displacy.
     :param pdf_file_location: file location of the pdf to analyze.
     :param display_file_location: whether to display sentence with entities
-    :return: dictionary of entities. Should be formmated like so:
+    :return: dictionary of entities. Should be formatted like so:
         {
             "entity_label": ["list", "of", "entities"],
             ...
         }
 
         For example,
-
         {
             "ORG": ["USU", "BYU"],
             ...
         }
-
     """
+    reader = PdfReader(pdf_file_location)
+    text = ""
+    for page in reader.pages:
+        text += page.extract_text() or ""
+
+    doc = nlp(text)
+    entities: dict[str, list[str]] = {}
+    for ent in doc.ents:
+        entities.setdefault(ent.label_, []).append(ent.text)
+
+    if display_file_location:
+        with open(display_file_location, "w", encoding="utf-8") as f:
+            f.write(displacy.render(doc, style="ent"))
+
+    return entities
 
 
 def token_analyzer(text: str, display_file_location: str = None) -> dict:
@@ -58,7 +71,23 @@ def token_analyzer(text: str, display_file_location: str = None) -> dict:
             }
         }
     """
+    doc = nlp(text)
+    token_info = {}
 
+    for token in doc:
+        token_info[token.text] = {
+            "lemma": token.lemma_,
+            "pos": token.pos_,
+            "shape": token.shape_,
+            "is_alpha": token.is_alpha,
+            "is_stop": token.is_stop,
+        }
+
+    if display_file_location:
+        with open(display_file_location, "w", encoding="utf-8") as f:
+            f.write(displacy.render(doc, style="dep"))
+
+    return token_info
 
 
 def remove_stop_words(text: str) -> str:
@@ -67,7 +96,9 @@ def remove_stop_words(text: str) -> str:
     :param text: original sentence, text
     :return: same string, but without stop words
     """
-
+    doc = nlp(text)
+    filtered_tokens = [token.text for token in doc if not token.is_stop]
+    return " ".join(filtered_tokens)
 
 
 def lemmatizer(text: str) -> str:
@@ -76,7 +107,9 @@ def lemmatizer(text: str) -> str:
     :param text: original sentence, text to lemmatize
     :return: lemmatized text
     """
-
+    doc = nlp(text)
+    lemmas = [token.lemma_ for token in doc]
+    return " ".join(lemmas)
 
 
 def create_character_tokenizer(training_text: str, text_to_tokenize: str) -> list[int]:
@@ -91,3 +124,28 @@ def create_character_tokenizer(training_text: str, text_to_tokenize: str) -> lis
     :param text_to_tokenize: text to tokenize using found character level tokenization.
     :return: list of the tokens.
     """
+    char2idx = {}
+    for ch in training_text:
+        if ch not in char2idx:
+            char2idx[ch] = len(char2idx)
+
+    return [char2idx[ch] for ch in text_to_tokenize]
+
+
+# ---------------------------
+# Testing block
+# ---------------------------
+if __name__ == "__main__":
+    sample = "Apple hired John in New York."
+
+    print("Token analyzer:", token_analyzer(sample))
+    print("Without stopwords:", remove_stop_words(sample))
+    print("Lemmatized:", lemmatizer(sample))
+
+    training = "abcdefghijklmnopqrstuvwxyz "
+    print("Char tokenizer:", create_character_tokenizer(training, "hello world"))
+
+    try:
+        print("PDF entities:", pdf_entity_extractor("syllabus.pdf"))
+    except FileNotFoundError:
+        print("PDF not found – put syllabus.pdf in the folder to test.")
