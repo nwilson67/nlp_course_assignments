@@ -32,7 +32,31 @@ def pdf_entity_extractor(pdf_file_location, display_file_location: str = None) -
         }
 
     """
+    reader = PdfReader(pdf_file_location)
+    full_text = ""
+    for page in reader.pages:
+        page_text = page.extract_text()
+        if page_text:
+            full_text += page_text + "\n"
 
+    #This is the document
+    doc = nlp(full_text)
+
+    #Build Entity Dictionary
+    entities: dict[str, set[str]] = {}
+    for ent in doc.ents:
+        entities.setdefault(ent.label_, set()).add(ent.text)
+
+    entity_dict: dict[str, list[str]] = {
+        label: sorted(list(vals)) for label, vals in entities.items()
+    }
+
+    if display_file_location:
+        html = displacy.render(doc, style="ent", page=True)
+        with open(display_file_location, "w", encoding="utf-8") as f:
+            f.write(html)
+
+    return entity_dict
 
 def token_analyzer(text: str, display_file_location: str = None) -> dict:
     """
@@ -58,6 +82,25 @@ def token_analyzer(text: str, display_file_location: str = None) -> dict:
             }
         }
     """
+    doc = nlp(text)
+
+    token_info: dict[str, dict[str, object]] = {}
+    for token in doc:
+        token_info[token.text] = {
+            "lemma": token.lemma_,
+            "pos": token.pos_,
+            "shape": token.shape_,
+            "is_alpha": token.is_alpha,
+            "is_stop": token.is_stop
+        }
+
+    # Optional displaCy dependency visualization
+    if display_file_location:
+        html = displacy.render(doc, style="dep", page=True)
+        with open(display_file_location, "w", encoding="utf-8") as f:
+            f.write(html)
+
+    return token_info
 
 
 
@@ -91,3 +134,14 @@ def create_character_tokenizer(training_text: str, text_to_tokenize: str) -> lis
     :param text_to_tokenize: text to tokenize using found character level tokenization.
     :return: list of the tokens.
     """
+
+if __name__=="__main__":
+    pdf_entity_extractor("stat_5810_6810_fall_2025_syllabus.pdf")
+
+    entities = pdf_entity_extractor(
+        "stat_5810_6810_fall_2025_syllabus.pdf",
+        display_file_location="entities.html"
+    )
+    tokens = token_analyzer("stat_5810_6810_fall_2025_syllabus.pdf", display_file_location="tokens.html")
+    #print(entities)
+    print(tokens)
