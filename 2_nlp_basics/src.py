@@ -12,6 +12,14 @@ from spacy import displacy
 # Assumes this model is already downloaded
 nlp = spacy.load("en_core_web_sm")
 
+def read_pdf(pdf_file_location):
+    reader = PdfReader(pdf_file_location)
+    full_text = ""
+    for page in reader.pages:
+        page_text = page.extract_text()
+        if page_text:
+            full_text += page_text + "\n"
+    return full_text
 
 def pdf_entity_extractor(pdf_file_location, display_file_location: str = None) -> dict[str, list[str]]:
     """
@@ -32,13 +40,8 @@ def pdf_entity_extractor(pdf_file_location, display_file_location: str = None) -
         }
 
     """
-    reader = PdfReader(pdf_file_location)
-    full_text = ""
-    for page in reader.pages:
-        page_text = page.extract_text()
-        if page_text:
-            full_text += page_text + "\n"
 
+    full_text = read_pdf(pdf_file_location)
     #This is the document
     doc = nlp(full_text)
 
@@ -82,7 +85,8 @@ def token_analyzer(text: str, display_file_location: str = None) -> dict:
             }
         }
     """
-    doc = nlp(text)
+    full_text = read_pdf(text)
+    doc = nlp(full_text)
 
     token_info: dict[str, dict[str, object]] = {}
     for token in doc:
@@ -110,7 +114,14 @@ def remove_stop_words(text: str) -> str:
     :param text: original sentence, text
     :return: same string, but without stop words
     """
-
+    full_text = read_pdf(text)
+    print(full_text)
+    doc = nlp(full_text)
+    final_text = ""
+    for token in doc:
+        if not token.is_stop:
+            final_text += token.text + " "
+    return final_text
 
 
 def lemmatizer(text: str) -> str:
@@ -119,6 +130,15 @@ def lemmatizer(text: str) -> str:
     :param text: original sentence, text to lemmatize
     :return: lemmatized text
     """
+    nlp = spacy.load("en_core_web_sm")
+    full_text = read_pdf(text)
+    doc = nlp(full_text)
+    lemmas = ""
+
+    # Print each token and its lemma
+    for token in doc:
+        lemmas += token.lemma_ + " "
+    return lemmas
 
 
 
@@ -135,13 +155,32 @@ def create_character_tokenizer(training_text: str, text_to_tokenize: str) -> lis
     :return: list of the tokens.
     """
 
+    # create an ordered mapping of char -> index based on first occurrence in training_text
+    char_to_index: dict[str, int] = {}
+    for ch in training_text:
+        if ch not in char_to_index:
+            char_to_index[ch] = len(char_to_index)
+
+    # map each character in text_to_tokenize to its index
+    # if a character is not in the vocabulary, raise an error (or handle as desired)
+    encoded: list[int] = []
+    for ch in text_to_tokenize:
+        if ch not in char_to_index and ch != ' ':
+            raise ValueError(f"Character '{ch}' not found in training vocabulary.")
+        encoded.append(char_to_index[ch])
+
+    return encoded
+
 if __name__=="__main__":
-    pdf_entity_extractor("stat_5810_6810_fall_2025_syllabus.pdf")
+    file_path = "stat_5810_6810_fall_2025_syllabus.pdf"
 
     entities = pdf_entity_extractor(
-        "stat_5810_6810_fall_2025_syllabus.pdf",
+        file_path,
         display_file_location="entities.html"
     )
-    tokens = token_analyzer("stat_5810_6810_fall_2025_syllabus.pdf", display_file_location="tokens.html")
+    tokens = token_analyzer(file_path, display_file_location="tokens.html")
     #print(entities)
-    print(tokens)
+    #print(tokens)
+    #print(lemmatizer(file_path))
+    #print(remove_stop_words(file_path))
+    #print(create_character_tokenizer('abcdefghijklmnopqrstuvwxyz', 'hellohowareyoutoday'))
