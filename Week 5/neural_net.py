@@ -54,11 +54,11 @@ class HousingNet(nn.Module):
 model = HousingNet()
 
 criterion = nn.MSELoss()
-optimizer = optim.Adam(model.parameters(), lr=0.01)
+optimizer = optim.Adam(model.parameters(), lr=0.01) #loss rate of 0.01
 
 epochs = 200
 for epoch in range(epochs):
-    model.train()
+    model.train() #Put model in training mode
     optimizer.zero_grad() #clear previous gradients, using optimizer here too
     y_pred = model(X_train) #Forward pass
     loss = criterion(y_pred, y_train) #calculate loss
