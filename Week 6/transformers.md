@@ -1,18 +1,4 @@
-## Assignment description
 
-For this week's assignment I'm asking you to write a 1–2-page paper explaining the Transformer. As discussed in class, my goal here is to give you an opportunity to dive in and understand the Transformer yourself. The quote I shared is attributed to Francis Bacon: "writing makes an exact man". Hopefully, writing about the Transformer will help you internalize its concepts.
-
-Your audience should be technical, with familiarity around ML/AI. Pretend you are writing a technical blogpost, teaching the world how Transformers work. Another way to think about it is you are writing for your future self when you forget how the Transformer works.
-
-Here is a rubric:
-
-Has at least 1 page of content: 15 points
-Is clear, but concise, easy to follow, if I didn't know what a Transformer was would I know it generally after reading: 15 points
-Talks about self-attention and gives some intuition of what attention is doing: 15 points
-Talks about the general architecture and training process (i.e. multi-headed attention, blocks, linear layers, cross-entropy, softmax, dropout, any techniques that help with training, etc.): 15 points
-Talks about why transformers work so well: 15 points
-
-Feel free to add an image or two, proofs (Nick if you'd like), but mainly focus on making Transformers clear.
 
 ### Transformers Technical Blogpost Post
 
