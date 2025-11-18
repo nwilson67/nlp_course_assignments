@@ -1,0 +1,14 @@
+
+Sentiment Analysis
+Accuracy on 25 samples: 0.72
+Total Input Tokens: 2599
+Total Output Tokens: 3951
+
+News Headline Analysis
+Accuracy on 25 news headlines: 0.68
+Total Input Tokens: 4035
+Total Output Tokens: 79
+
+The Output Tokens for the News Headline Analysis seems pretty low. The accuracy is impressive 
+considering that it had to put it in so many more categories, and it seems that the LLM did a good 
+job- once I gave it options to choose from. Accuracy can be improved with more examples and more prompting, I am sure.
