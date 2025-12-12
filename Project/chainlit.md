@@ -1,14 +1,21 @@
-# Welcome to Chainlit! 🚀🤖
+# ⚡️ Pokémon GPT Agent: Professor Oak's Research Terminal 🔬
 
-Hi there, Developer! 👋 We're excited to have you on board. Chainlit is a powerful tool designed to help you prototype, debug and share applications built on top of LLMs.
+Welcome to the Pokémon GPT Agent! This specialized chatbot is designed to assist both novice and expert trainers by accessing structured data and deep biological lore about the original 151 Pokémon.
 
-## Useful Links 🔗
+## Agent Capabilities
 
-- **Documentation:** Get started with our comprehensive [Chainlit Documentation](https://docs.chainlit.io) 📚
-- **Discord Community:** Join our friendly [Chainlit Discord](https://discord.gg/k73SQ3FyUh) to ask questions, share your projects, and connect with other developers! 💬
+Our Agent uses a sophisticated multi-tool setup to provide accurate, context-aware answers:
 
-We can't wait to see what you create with Chainlit! Happy coding! 💻😊
+1.  **Pokedex SQL Tool (Structured Data):** Accesses a full Pokedex database to retrieve stats, types, and moves. Perfect for factual queries.
+    * *Example Queries:* "What is Squirtle's base HP?", "List all moves learned by Pikachu."
+2.  **RAG Lore Tool (Unstructured Data):** Uses Retrieval-Augmented Generation to search Professor Oak's research papers. This tool provides biological explanations, capture strategies, and evolutionary details.
+    * *Example Queries:* "Why is the Magikarp Paradox significant?", "What is the best way to catch an Abra?", "How does Eevee evolve?"
 
-## Welcome screen
+## How to Interact
 
-To modify the welcome screen, edit the `chainlit.md` file at the root of your project. If you do not want a welcome screen, just leave this file empty.
+The Agent's core intelligence (Gemini) automatically determines the correct tool to use based on your question.
+
+* **For Stats/Moves:** Ask a specific question that requires a numerical or categorical data lookup.
+* **For Lore/Strategy:** Ask a conceptual or descriptive question about biology, behavior, or capture methods.
+
+---
