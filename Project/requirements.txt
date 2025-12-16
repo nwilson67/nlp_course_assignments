@@ -1,0 +1,21 @@
+To create this project
+
+1) Run db_setup.py. This will allow you to create your Pokedex.db file.
+
+2) Run chunking.py. This takes in the pokemon_docs.csv (Professor Oak's 10 journal entries) and chunks and embeds them, and then dumps to a pkl.
+
+3) Run app.py. This will load the chunks and embed them into queries for the RAG tool, or access the database with the database tool, 
+or access the web with the web search. 
+
+You must have the following in your .env file. IMPORTANT Note: The voyage api key may need to be pasted directly into the 
+code on line 37 of app.py.
+VOYAGE_CLIENT = Client(api_key="Your API Key Here")
+
+GOOGLE_API_KEY=
+VOYAGE_API_KEY=
+LANGFUSE_SECRET_KEY =
+LANGFUSE_PUBLIC_KEY = 
+LANGFUSE_BASE_URL = 
+TAVILY_API_KEY=
+
+Enjoy the pokemon chatbot!
